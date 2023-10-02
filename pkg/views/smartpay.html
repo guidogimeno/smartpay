@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.6"
+        integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni"
+        crossorigin="anonymous"></script>
+    <title>Smartpay</title>
+    <link rel="stylesheet" href="/views/styles.css">
+</head>
+
+<body>
+    <div id="app">
+        <header class="py-6">
+            <h1 class="text-xl font-bold">Smartpay</h1>
+        </header>
+        <main>
+            <form hx-post="/analysis" hx-target="#analysis" class="shadow-md rounded-md p-4">
+                <div class="flex flex-col pb-6">
+                    <label class="font-semibold mb-2">Amount</label>
+                    <div class="relative rounded-md shadow-sm">
+                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <span class="text-gray-500 sm:text-sm">$</span>
+                        </div>
+                        <input id="amount" name="amount" type="number" placeholder="Ex: 500.00"
+                            class="block w-full rounded-md border-0 py-1.5 pr-2 pl-7 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 outline-none">
+                    </div>
+                </div>
+                <div class="flex flex-col pb-6">
+                    <label class="font-semibold mb-2">Installments</label>
+                    <input id="installments" name="installments" type="number" step="1" placeholder="Ex: 3"
+                        class="block w-full rounded-md border-0 py-1.5 pr-2 pl-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 outline-none">
+                </div>
+                <div class="flex flex-col pb-6">
+                    <label class="font-semibold mb-2">Interest Rate</label>
+                    <input id="interestRate" name="interestRate" type="number" step="0.01" placeholder="Ex: 0.05"
+                        class="block w-full rounded-md border-0 py-1.5 pr-2 pl-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 outline-none">
+                </div>
+                <div class="text-right">
+                    <button type="submit"
+                        class="py-2 px-3 bg-indigo-500 text-white text-sm font-semibold rounded-md shadow focus:outline-none">
+                        Evaluate
+                    </button>
+                </div>
+            </form>
+            <div id="spacing" class="py-4"></div>
+            <div id="analysis"></div>
+        </main>
+        <footer class="p-4">
+            <div class="text-xs text-stone-400">
+                &copy; 2023 Guido Gimeno. All rights reserved. | <a class="text-blue-600"
+                    href="https://github.com/guidogimeno">GitHub</a>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>

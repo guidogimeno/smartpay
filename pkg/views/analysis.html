@@ -1,0 +1,9 @@
+<div class="flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0">
+	{{ range . }}
+	<div class="bg-sky-500 p-4 rounded-md text-white shadow-md flex-1">
+		<label class="pb-4 font-semibold block">{{ .Entity }}</label>
+		<label class="py-2 block">Savings: $<span>{{ .Savings }}</span> ARS</label>
+		<label class="py-2 block">Index: <span>{{ .Index }}</span>%</label>
+	</div>
+	{{ end }}
+</div>
