@@ -2,7 +2,8 @@ package main
 
 import (
 	"log"
-	"smartpay/pkg/http/rest"
+
+	"github.com/guidogimeno/smartpay/pkg/http/rest"
 )
 
 func main() {

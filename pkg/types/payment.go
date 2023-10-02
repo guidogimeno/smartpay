@@ -2,9 +2,9 @@ package types
 
 import (
 	"errors"
-	"smartpay/pkg/scrapper"
 	"time"
 
+	"github.com/guidogimeno/smartpay/pkg/scrapper"
 	"github.com/shopspring/decimal"
 )
 

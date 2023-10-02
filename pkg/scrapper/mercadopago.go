@@ -3,9 +3,10 @@ package scrapper
 import (
 	"errors"
 	"regexp"
-	"smartpay/pkg/http/client"
 	"strconv"
 	"time"
+
+	"github.com/guidogimeno/smartpay/pkg/http/client"
 )
 
 const (

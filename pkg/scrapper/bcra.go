@@ -3,12 +3,12 @@ package scrapper
 import (
 	"fmt"
 	"net/url"
-	"smartpay/pkg/http/client"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/guidogimeno/smartpay/pkg/http/client"
 )
 
 const (

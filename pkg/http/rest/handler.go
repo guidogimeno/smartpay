@@ -3,9 +3,9 @@ package rest
 import (
 	"html/template"
 	"net/http"
-	"smartpay/pkg/types"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/guidogimeno/smartpay/pkg/types"
 )
 
 type HandlerFunc func(*fiber.Ctx) error
