@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
 	"github.com/guidogimeno/smartpay/pkg/types"
 )
 
@@ -69,6 +70,7 @@ func analysisHandler() HandlerFunc {
 func smartpayHandler(c *fiber.Ctx) error {
 	t, err := template.ParseGlob("pkg/views/smartpay.html")
 	if err != nil {
+		log.Error(err)
 		return c.SendStatus(http.StatusInternalServerError)
 	}
 	c.Type("html")
