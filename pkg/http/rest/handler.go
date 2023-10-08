@@ -1,20 +1,23 @@
 package rest
 
 import (
-	"html/template"
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/log"
+	"github.com/gofiber/template/html/v2"
 	"github.com/guidogimeno/smartpay/pkg/types"
 )
 
 type HandlerFunc func(*fiber.Ctx) error
 
 func Handler() *fiber.App {
-	app := fiber.New()
+	engine := html.New("./public/templates", ".html")
 
-	app.Static("/views", "./pkg/views")
+	app := fiber.New(fiber.Config{
+		Views: engine,
+	})
+
+	app.Static("/public", "./public")
 
 	app.Get("/ping", pingHandler)
 	app.Get("/", smartpayHandler)
@@ -57,22 +60,10 @@ func analysisHandler() HandlerFunc {
 			return c.SendStatus(http.StatusInternalServerError)
 		}
 
-		t, err := template.ParseGlob("pkg/views/analysis.html")
-		if err != nil {
-			return c.SendStatus(http.StatusInternalServerError)
-		}
-
-		c.Type("html")
-		return t.Execute(c, a)
+		return c.Render("analysis", a)
 	}
 }
 
 func smartpayHandler(c *fiber.Ctx) error {
-	t, err := template.ParseGlob("pkg/views/smartpay.html")
-	if err != nil {
-		log.Error(err)
-		return c.SendStatus(http.StatusInternalServerError)
-	}
-	c.Type("html")
-	return t.Execute(c, nil)
+	return c.Render("smartpay", nil)
 }
