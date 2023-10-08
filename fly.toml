@@ -6,9 +6,6 @@
 app = "jimbapp"
 primary_region = "eze"
 
-[env]
-  PORT = "8080"
-
 [build]
   builder = "paketobuildpacks/builder:base"
   buildpacks = ["gcr.io/paketo-buildpacks/go"]

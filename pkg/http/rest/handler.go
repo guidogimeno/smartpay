@@ -1,8 +1,6 @@
 package rest
 
 import (
-	"net/http"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html/v2"
 	"github.com/guidogimeno/smartpay/pkg/types"
@@ -41,7 +39,7 @@ func analysisHandler() HandlerFunc {
 		var paymentRequest Payment
 		err := c.BodyParser(&paymentRequest)
 		if err != nil {
-			return c.SendStatus(http.StatusBadRequest)
+			return c.Render("error", "Invalid payment")
 		}
 
 		p := types.NewPayment(
@@ -52,12 +50,12 @@ func analysisHandler() HandlerFunc {
 
 		err = p.IsValid()
 		if err != nil {
-			return c.SendStatus(http.StatusBadRequest)
+			return c.Render("error", err.Error())
 		}
 
 		a, err := p.Analysis()
 		if err != nil {
-			return c.SendStatus(http.StatusInternalServerError)
+			return c.Render("error", err.Error())
 		}
 
 		return c.Render("analysis", a)

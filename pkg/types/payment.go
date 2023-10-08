@@ -32,15 +32,15 @@ func (p *Payment) DecimalAmount() decimal.Decimal {
 
 func (p *Payment) IsValid() error {
 	if p.Amount <= 0 {
-		return errors.New("amount must be greater than 0")
+		return errors.New("Amount must be greater than 0")
 	}
 
 	if p.InterestRate < 0 {
-		return errors.New("interest rate must be positive")
+		return errors.New("Interest rate must be positive")
 	}
 
-	if p.Installments < 0 {
-		return errors.New("number of installments must be positive")
+	if p.Installments < 1 {
+		return errors.New("Number of installments must be greater than 0")
 	}
 
 	return nil
