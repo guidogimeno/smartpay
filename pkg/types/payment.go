@@ -13,9 +13,10 @@ const (
 )
 
 type Payment struct {
-	Amount       float64
-	Installments int
-	InterestRate float32
+	Amount            float64
+	Installments      int
+	InstallmentAmount float64
+	InterestRate      float32
 }
 
 func NewPayment(amount float64, installments int, interestRate float32) *Payment {
@@ -37,6 +38,10 @@ func (p *Payment) IsValid() error {
 
 	if p.InterestRate < 0 {
 		return errors.New("Interest rate must be positive")
+	}
+
+	if p.InstallmentAmount < 0 {
+		return errors.New("Installment amount must be positive")
 	}
 
 	if p.Installments < 1 {
@@ -90,6 +95,10 @@ func (p *Payment) doTheMath(r scrapper.Ratable) (*Analysis, error) {
 }
 
 func (p *Payment) installmentWithInterest() decimal.Decimal {
+	if p.InstallmentAmount > 0 {
+		return decimal.NewFromFloat(p.InstallmentAmount)
+	}
+
 	installments := decimal.NewFromInt(int64(p.Installments))
 	interestRate := decimal.NewFromFloat32(p.InterestRate)
 

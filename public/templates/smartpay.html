@@ -13,7 +13,7 @@
 </head>
 
 <body>
-	<div id="app">
+    <div id="app">
         <header class="py-6">
             <h1 class="text-xl font-bold">Smartpay</h1>
         </header>
@@ -31,20 +31,14 @@
                 </div>
                 <div class="flex flex-col pb-6">
                     <label class="font-semibold mb-2">Installments</label>
-					<div class="rounded-md shadow-sm">
-                    	<input id="installments" name="installments" type="number" step="1" placeholder="Ex: 3"
-                        class="block w-full rounded-md border-0 py-1.5 pr-2 pl-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 outline-none">
-					</div>
+                    <div class="rounded-md shadow-sm">
+                        <input id="installments" name="installments" type="number" step="1" placeholder="Ex: 3"
+                            class="block w-full rounded-md border-0 py-1.5 pr-2 pl-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 outline-none">
+                    </div>
                 </div>
-                <div class="flex flex-col pb-6">
-                    <label class="font-semibold mb-2">Interest Rate</label>
-					<div class="rounded-md shadow-sm">
-                    	<input id="interestRate" name="interestRate" type="number" step="0.01" placeholder="Ex: 0.05"
-                        class="block w-full rounded-md border-0 py-1.5 pr-2 pl-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 outline-none">
-					</div>
-                </div>
+                {{ template "select" }}
                 <div class="text-right">
-                    <button type="submit" 
+                    <button id="evaluate" type="submit"
                         class="py-2 px-3 bg-indigo-500 text-white text-sm font-semibold rounded-md shadow focus:outline-none">
                         Evaluate
                     </button>

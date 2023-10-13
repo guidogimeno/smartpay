@@ -1,0 +1,53 @@
+{{ define "select" }}
+<select id="selection" class="font-semibold mb-2">
+	<option value="amount">
+		Installment Amount
+	</option>
+	<option value="rate">
+		Interest Rate
+	</option>
+</select>
+
+<div id="amountOption" class="flex flex-col pb-6">
+	<div class="relative rounded-md shadow-sm">
+		<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+			<span class="text-gray-500 sm:text-sm">$</span>
+		</div>
+		<input id="installmentAmount" name="installmentAmount" type="number" placeholder="Ex: 200.00"
+			class="block w-full rounded-md border-0 py-1.5 pr-2 pl-7 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 outline-none">
+	</div>
+</div>
+
+<div id="rateOption" class="flex flex-col pb-6 hidden">
+	<div class="rounded-md shadow-sm">
+		<input id="interestRate" name="interestRate" type="number" step="0.01" placeholder="Ex: 0.05"
+			class="block w-full rounded-md border-0 py-1.5 pr-2 pl-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 outline-none">
+	</div>
+</div>
+
+<script>
+	const selection = document.getElementById('selection');
+
+	const amount = document.getElementById('amountOption');
+	const amountInput = document.getElementById('installmentAmount');
+
+	const rate = document.getElementById('rateOption');
+	const rateInput = document.getElementById('interestRate');
+
+	selection.addEventListener('change', function () {
+		if (selection.value === 'amount') {
+			amount.style.display = 'block';
+			rate.style.display = 'none';
+			rateInput.value = null;
+			return
+		}
+
+		if (selection.value === 'rate') {
+			rate.style.display = 'block';
+			amount.style.display = 'none';
+			amountInput.value = null;
+			return
+		}
+	});
+</script>
+{{ end }}

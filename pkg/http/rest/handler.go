@@ -30,9 +30,10 @@ func pingHandler(c *fiber.Ctx) error {
 
 func analysisHandler() HandlerFunc {
 	type Payment struct {
-		Amount       float64 `json:"amount"`
-		Installments int     `json:"installments"`
-		InterestRate float32 `json:"interestRate"`
+		Amount            float64 `json:"amount"`
+		Installments      int     `json:"installments"`
+		InterestRate      float32 `json:"interestRate"`
+		InstallmentAmount float64 `json:"installmentAmount"`
 	}
 
 	return func(c *fiber.Ctx) error {
@@ -42,11 +43,12 @@ func analysisHandler() HandlerFunc {
 			return c.Render("error", "Invalid payment")
 		}
 
-		p := types.NewPayment(
-			paymentRequest.Amount,
-			paymentRequest.Installments,
-			paymentRequest.InterestRate,
-		)
+		p := &types.Payment{
+			Amount:            paymentRequest.Amount,
+			Installments:      paymentRequest.Installments,
+			InterestRate:      paymentRequest.InterestRate,
+			InstallmentAmount: paymentRequest.InstallmentAmount,
+		}
 
 		err = p.IsValid()
 		if err != nil {
