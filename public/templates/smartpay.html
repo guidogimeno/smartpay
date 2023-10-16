@@ -38,9 +38,10 @@
                 </div>
                 {{ template "select" }}
                 <div class="text-right">
-                    <button id="evaluate" type="submit"
-                        class="py-2 px-3 bg-indigo-500 text-white text-sm font-semibold rounded-md shadow focus:outline-none">
-                        Evaluate
+                    <button id="evaluate" type="submit" hx-indicator="#indicator"
+                        class="py-2 px-3 bg-indigo-500 text-white text-sm font-semibold rounded-md shadow focus:outline-none w-24">
+                        <span class="htmx-indicator button-text">Evaluate</span>
+                        <img id="indicator" class="htmx-indicator button-spinner" src="/public/images/spinner.svg">
                     </button>
                 </div>
             </form>

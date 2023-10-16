@@ -1,7 +1,9 @@
 package types
 
 import (
+	"context"
 	"errors"
+	"sync"
 	"time"
 
 	"github.com/guidogimeno/smartpay/pkg/scrapper"
@@ -58,23 +60,53 @@ func (p *Payment) Analysis() ([]*Analysis, error) {
 		&scrapper.BCRA{},
 	}
 
-	for _, r := range ratables {
-		a, err := p.doTheMath(r)
-		if err != nil {
-			return nil, err
-		}
+	var (
+		resultsCh = make(chan *Analysis)
+		errCh     = make(chan error)
+		wg        = sync.WaitGroup{}
+	)
 
-		analysis = append(analysis, a)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	for _, r := range ratables {
+		wg.Add(1)
+		go p.doTheMath(ctx, r, resultsCh, errCh, &wg)
 	}
 
-	return analysis, nil
+	go func() {
+		wg.Wait()
+		close(resultsCh)
+		close(errCh)
+	}()
+
+	for {
+		select {
+		case a, ok := <-resultsCh:
+			if !ok {
+				return analysis, nil
+			}
+			analysis = append(analysis, a)
+		case err := <-errCh:
+			cancel()
+			return nil, err
+		}
+	}
 }
 
-func (p *Payment) doTheMath(r scrapper.Ratable) (*Analysis, error) {
-	today := time.Now()
-	rate, err := r.Rate(today)
+func (p *Payment) doTheMath(
+	ctx context.Context,
+	ratable scrapper.Ratable,
+	resultsCh chan<- *Analysis,
+	errCh chan<- error,
+	wg *sync.WaitGroup,
+) {
+	defer wg.Done()
+
+	rate, err := ratable.Rate(ctx, time.Now())
 	if err != nil {
-		return nil, err
+		errCh <- err
+		return
 	}
 
 	tna := decimal.NewFromFloat(rate.Index).Div(decimal.NewFromInt(100))
@@ -87,11 +119,11 @@ func (p *Payment) doTheMath(r scrapper.Ratable) (*Analysis, error) {
 		savings = savings.Add(fixedDepositInterest).Sub(installmentWithInterest)
 	}
 
-	return &Analysis{
+	resultsCh <- &Analysis{
 		Entity:  rate.Source,
 		Savings: savings.RoundDown(0).InexactFloat64(),
 		Index:   rate.Index,
-	}, nil
+	}
 }
 
 func (p *Payment) installmentWithInterest() decimal.Decimal {

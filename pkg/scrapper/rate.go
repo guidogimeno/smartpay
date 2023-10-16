@@ -1,11 +1,12 @@
 package scrapper
 
 import (
+	"context"
 	"time"
 )
 
 type Ratable interface {
-	Rate(date time.Time) (*Rate, error)
+	Rate(ctx context.Context, date time.Time) (*Rate, error)
 }
 
 type Rate struct {

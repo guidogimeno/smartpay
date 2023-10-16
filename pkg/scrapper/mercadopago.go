@@ -1,6 +1,7 @@
 package scrapper
 
 import (
+	"context"
 	"errors"
 	"regexp"
 	"strconv"
@@ -15,8 +16,8 @@ const (
 
 type MercadoPago struct{}
 
-func (r *MercadoPago) Rate(date time.Time) (*Rate, error) {
-	response, err := client.Get(urlMercadoPago)
+func (r *MercadoPago) Rate(ctx context.Context, date time.Time) (*Rate, error) {
+	response, err := client.Get(urlMercadoPago, client.WithContext(ctx))
 	if err != nil {
 		return nil, err
 	}

@@ -1,6 +1,8 @@
 package scrapper
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"net/url"
 	"strconv"
@@ -22,7 +24,7 @@ const (
 
 type BCRA struct{}
 
-func (b *BCRA) Rate(date time.Time) (*Rate, error) {
+func (b *BCRA) Rate(ctx context.Context, date time.Time) (*Rate, error) {
 	threeMonthsAgo := date.AddDate(0, -3, 0)
 	startDate := threeMonthsAgo.Format(layout)
 	finishDate := date.Format(layout)
@@ -38,9 +40,15 @@ func (b *BCRA) Rate(date time.Time) (*Rate, error) {
 		"Content-Type": "application/x-www-form-urlencoded",
 	}
 
-	response, err := client.Post(url, formBody, client.WithHeaders(headers))
+	response, err := client.Post(
+		url,
+		formBody,
+		client.WithHeaders(headers),
+		client.WithContext(ctx),
+	)
+
 	if err != nil {
-		return nil, err
+		return nil, errors.New("Failed to fetch BCRA data")
 	}
 
 	index, err := parseIndex(response)

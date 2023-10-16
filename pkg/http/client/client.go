@@ -1,11 +1,13 @@
 package client
 
 import (
+	"context"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 )
 
 type client struct {
@@ -13,6 +15,7 @@ type client struct {
 	url     string
 	headers map[string]string
 	body    io.Reader
+	ctx     context.Context
 }
 
 type OptFunc func(*client)
@@ -30,6 +33,7 @@ func Get(url string, options ...OptFunc) (*Response, error) {
 		method:  http.MethodGet,
 		url:     url,
 		headers: make(map[string]string),
+		ctx:     context.Background(),
 	}
 
 	for _, option := range options {
@@ -45,6 +49,7 @@ func Post(url string, body io.Reader, options ...OptFunc) (*Response, error) {
 		url:     url,
 		headers: make(map[string]string),
 		body:    body,
+		ctx:     context.Background(),
 	}
 
 	for _, option := range options {
@@ -55,7 +60,7 @@ func Post(url string, body io.Reader, options ...OptFunc) (*Response, error) {
 }
 
 func exec(c *client) (*Response, error) {
-	req, err := http.NewRequest(c.method, c.url, c.body)
+	req, err := http.NewRequestWithContext(c.ctx, c.method, c.url, c.body)
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +69,7 @@ func exec(c *client) (*Response, error) {
 		req.Header.Add(key, value)
 	}
 
-	client := http.Client{}
+	client := http.Client{Timeout: time.Second * 5}
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
@@ -82,6 +87,12 @@ func exec(c *client) (*Response, error) {
 func WithHeaders(headers map[string]string) OptFunc {
 	return func(c *client) {
 		c.headers = headers
+	}
+}
+
+func WithContext(ctx context.Context) OptFunc {
+	return func(c *client) {
+		c.ctx = ctx
 	}
 }
 

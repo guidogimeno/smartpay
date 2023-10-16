@@ -5,3 +5,22 @@ body {
 #app {
 	padding: 0 20%;
 }
+
+/* button-text */
+.htmx-indicator.button-text {
+	opacity: 1;
+}
+
+.htmx-request .htmx-indicator.button-text {
+	display: none;
+}
+
+/* button-spinner */
+.htmx-indicator.button-spinner {
+	display: none;
+}
+
+.htmx-request .htmx-indicator.button-spinner {
+	display: inline;
+	height: 18px;
+}
