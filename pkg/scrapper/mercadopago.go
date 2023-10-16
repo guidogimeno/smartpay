@@ -3,7 +3,6 @@ package scrapper
 import (
 	"context"
 	"errors"
-	"log"
 	"regexp"
 	"strconv"
 	"time"
@@ -20,7 +19,6 @@ type MercadoPago struct{}
 func (r *MercadoPago) Rate(ctx context.Context, date time.Time) (*Rate, error) {
 	response, err := client.Get(urlMercadoPago, client.WithContext(ctx))
 	if err != nil {
-		log.Println("error mp", err)
 		return nil, err
 	}
 
@@ -28,7 +26,6 @@ func (r *MercadoPago) Rate(ctx context.Context, date time.Time) (*Rate, error) {
 	if err != nil {
 		return nil, err
 	}
-	log.Println("index mp", index)
 
 	return &Rate{
 		Source: "Mercado Pago",

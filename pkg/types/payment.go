@@ -3,7 +3,6 @@ package types
 import (
 	"context"
 	"errors"
-	"log"
 	"sync"
 	"time"
 
@@ -63,7 +62,6 @@ func (p *Payment) Analysis() ([]*Analysis, error) {
 
 	var (
 		resultsCh = make(chan *Analysis)
-		errCh     = make(chan error)
 		wg        = sync.WaitGroup{}
 	)
 
@@ -72,26 +70,26 @@ func (p *Payment) Analysis() ([]*Analysis, error) {
 
 	for _, r := range ratables {
 		wg.Add(1)
-		go p.doTheMath(ctx, r, resultsCh, errCh, &wg)
+		go p.doTheMath(ctx, r, resultsCh, &wg)
 	}
 
 	go func() {
 		wg.Wait()
 		close(resultsCh)
-		close(errCh)
 	}()
 
 	for {
 		select {
-		case a, ok := <-resultsCh:
+		case result, ok := <-resultsCh:
 			if !ok {
 				return analysis, nil
 			}
-			log.Print("a", a)
-			analysis = append(analysis, a)
-		case err := <-errCh:
-			cancel()
-			return nil, err
+
+			if result.Err != nil {
+				return nil, result.Err
+			}
+
+			analysis = append(analysis, result)
 		}
 	}
 }
@@ -100,14 +98,15 @@ func (p *Payment) doTheMath(
 	ctx context.Context,
 	ratable scrapper.Ratable,
 	resultsCh chan<- *Analysis,
-	errCh chan<- error,
 	wg *sync.WaitGroup,
 ) {
 	defer wg.Done()
 
 	rate, err := ratable.Rate(ctx, time.Now())
 	if err != nil {
-		errCh <- errors.New("Failed to fetch BCRA data")
+		resultsCh <- &Analysis{
+			Err: errors.New("Failed to fetch BCRA / MP data"),
+		}
 		return
 	}
 
