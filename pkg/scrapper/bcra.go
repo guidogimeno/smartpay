@@ -2,8 +2,8 @@ package scrapper
 
 import (
 	"context"
-	"errors"
 	"fmt"
+	"log"
 	"net/url"
 	"strconv"
 	"strings"
@@ -48,13 +48,15 @@ func (b *BCRA) Rate(ctx context.Context, date time.Time) (*Rate, error) {
 	)
 
 	if err != nil {
-		return nil, errors.New("Failed to fetch BCRA data")
+		log.Printf("post bcra: %v", err.Error())
+		return nil, err
 	}
 
 	index, err := parseIndex(response)
 	if err != nil {
 		return nil, err
 	}
+	log.Println("index", index)
 
 	return &Rate{
 		Source: "BCRA",

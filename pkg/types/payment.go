@@ -3,6 +3,7 @@ package types
 import (
 	"context"
 	"errors"
+	"log"
 	"sync"
 	"time"
 
@@ -86,6 +87,7 @@ func (p *Payment) Analysis() ([]*Analysis, error) {
 			if !ok {
 				return analysis, nil
 			}
+			log.Print("a", a)
 			analysis = append(analysis, a)
 		case err := <-errCh:
 			cancel()
@@ -105,7 +107,7 @@ func (p *Payment) doTheMath(
 
 	rate, err := ratable.Rate(ctx, time.Now())
 	if err != nil {
-		errCh <- err
+		errCh <- errors.New("Failed to fetch BCRA data")
 		return
 	}
 
