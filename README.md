@@ -39,7 +39,3 @@ This is a backend application written in Go that provides a convenient way to ca
 - [Guido Gimeno](https://github.com/guidogimeno) - Project Lead
 
 Please feel free to contribute by submitting bug reports, feature requests, or pull requests to this project.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
